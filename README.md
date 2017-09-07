@@ -7,11 +7,12 @@ comi compiler utility
 
 ## Пример
 вызова макроса e_geom.comi, который обрабатывается правильно:
+```
 $COMI 'e_geom'
-
+```
 ## Примеры 
 вызовов макроса e_geom.comi, которые не могут быть обработаны текущей версией правильно:
-
+```
 $COMI e_geom
 $COMI 'e_geom.comi'
 $COMI f:/project/e_geom.comi
@@ -19,6 +20,7 @@ $COMINPUT e_geom
 $COMINPUT 'e_geom'
 $COMINPUT 'e_geom.comi'
 $COMINPUT 'f:/project/e_geom.comi'
+```
 и т.д.
 
 Таким образом, компилятор может быть существенно улучшен, если будет понимать все форматы (ну, или большинство).
