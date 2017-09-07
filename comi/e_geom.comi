@@ -1,0 +1,121 @@
+// e_geom.comi
+//=============================================================================
+
+//=============================================================================
+// >>Cathode -- Определяем параметры катода
+#E_Cathode_W=2 |// Ширина катода, мм.
+#E_Cathode_H=1 |// Высота катода, мм.
+#E_Cathode_L=0.25 |// Длина катода, мм.
+
+//=============================================================================
+// >>Emitter -- Определяем параметры эмиттера
+#E_Emitter_W=#E_Cathode_W/2 |// Ширина эмиттера, мм.
+#E_Emitter_H=#E_Cathode_H/2 |// Высота эмиттера, мм.
+#E_Emitter_L=#E_Cathode_L |// Длина эмиттера, мм.
+
+//=============================================================================
+// >>Drift -- Определяем параметры пролетного канала
+#E_Drift_W=#E_Cathode_W |// Ширина канала, мм.
+#E_Drift_H=#E_Cathode_H |// Высота канала, мм.
+#E_Drift_L=5 |// Длина канала, мм.
+
+//=============================================================================
+// >>Kollector -- Определяем параметры коллектора
+#E_Kollector_W=#E_Cathode_W |// Ширина коллектора, мм.
+#E_Kollector_H=#E_Cathode_H |// Высота коллектора, мм.
+#E_Kollector_L=#E_Cathode_L |// Длина коллектора, мм.
+
+//=============================================================================
+// КООРДИНАТЫ
+//=============================================================================
+// @Cathode -- координаты катода
+#E_Cathode_Z0=-#E_Cathode_L
+#E_Cathode_Z1=0
+#E_Cathode_X0=-#E_Cathode_W/2
+#E_Cathode_X1=#E_Cathode_W/2
+#E_Cathode_Y0=-#E_Cathode_H/2
+#E_Cathode_Y1=#E_Cathode_H/2
+
+//=============================================================================
+// @Emitter -- координаты эмиттера
+#E_Emitter_Z0=-#E_Emitter_L
+#E_Emitter_Z1=0
+#E_Emitter_X0=-#E_Emitter_W/2
+#E_Emitter_X1=#E_Emitter_W/2
+#E_Emitter_Y0=-#E_Emitter_H/2
+#E_Emitter_Y1=#E_Emitter_H/2
+
+//=============================================================================
+// @Drift -- координаты канала
+#E_Drift_Z0=#E_Cathode_Z1
+#E_Drift_Z1=#E_Drift_Z0+#E_Drift_L
+#E_Drift_X0=-#E_Drift_W/2
+#E_Drift_X1=#E_Drift_W/2
+#E_Drift_Y0=-#E_Drift_H/2
+#E_Drift_Y1=#E_Drift_H/2
+
+//=============================================================================
+// @Kollector -- координаты коллектора
+#E_Kollector_Z0=#E_Drift_Z1
+#E_Kollector_Z1=#E_Kollector_Z0+#E_Kollector_L
+#E_Kollector_X0=-#E_Kollector_W/2
+#E_Kollector_X1=#E_Kollector_W/2
+#E_Kollector_Y0=-#E_Kollector_H/2
+#E_Kollector_Y1=#E_Kollector_H/2
+
+//=============================================================================
+// @Domain -- координаты катода
+#E_Domain_Z0=#E_Cathode_Z0
+#E_Domain_Z1=#E_Kollector_Z1
+#E_Domain_X0=#E_Cathode_X0
+#E_Domain_X1=#E_Cathode_X1
+#E_Domain_Y0=#E_Cathode_Y0
+#E_Domain_Y1=#E_Cathode_Y1
+
+//=============================================================================
+// ПОСТРОЕНИЕ
+//=============================================================================
+// #Cathode -- построение катода
+BLOCK Name='Cathode', 
+    X0=#E_Cathode_X0 X1=#E_Cathode_X1,
+    Y0=#E_Cathode_Y0 Y1=#E_Cathode_Y1,
+    Z0=#E_Cathode_Z0 Z1=#E_Cathode_Z1
+PICK OPTION=ADD PROPERTY=UniqueName LABEL='Cathode'
+CELLDATA OPTION=MODIFY MATERIALLABEL='Cathode' SIZE=0.5 LEVEL=100
+
+//=============================================================================
+// #Emitter -- построение эмиттера
+BLOCK Name='Emitter', 
+    X0=#E_Emitter_X0 X1=#E_Emitter_X1,
+    Y0=#E_Emitter_Y0 Y1=#E_Emitter_Y1,
+    Z0=#E_Emitter_Z0 Z1=#E_Emitter_Z1
+PICK OPTION=ADD PROPERTY=UniqueName LABEL='Emitter'
+CELLDATA OPTION=MODIFY MATERIALLABEL='Emitter' SIZE=0.5 LEVEL=100
+
+//==============================================================================
+// $Emitter -- Впечатывание эмиттера в катод
+PICK OPTION=TOGGLE PROPERTY=UniqueName LABEL='Cathode'
+PICK OPTION=TOGGLE PROPERTY=UniqueName LABEL='Emitter'
+COMBINE OPERATION=TRIM +REGULAR
+
+//=============================================================================
+// #Drift -- построение канала
+BLOCK Name='Drift', 
+    X0=#E_Drift_X0 X1=#E_Drift_X1,
+    Y0=#E_Drift_Y0 Y1=#E_Drift_Y1,
+    Z0=#E_Drift_Z0 Z1=#E_Drift_Z1
+PICK OPTION=ADD PROPERTY=UniqueName LABEL='Drift'
+CELLDATA OPTION=MODIFY MATERIALLABEL='Air' SIZE=0.5 LEVEL=100
+
+//=============================================================================
+// #Kollector -- построение эмиттера
+BLOCK Name='Kollector', 
+    X0=#E_Kollector_X0 X1=#E_Kollector_X1,
+    Y0=#E_Kollector_Y0 Y1=#E_Kollector_Y1,
+    Z0=#E_Kollector_Z0 Z1=#E_Kollector_Z1
+PICK OPTION=ADD PROPERTY=UniqueName LABEL='Kollector'
+CELLDATA OPTION=MODIFY MATERIALLABEL='Kollector' SIZE=0.5 LEVEL=100
+
+//------------------------------------------------------------------------------
+// Настраиваем вид на контур
+THREED OPTION=SETVIEW SIZE=0

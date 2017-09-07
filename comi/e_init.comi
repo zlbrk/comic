@@ -1,0 +1,14 @@
+// e_init.comi
+//==============================================================================
+$string e_root 'F:\OPERA3D\BeamTransfer' |// Корневая директория проекта
+$PROJECTFOLDER FOLDER='&e_root&' |// Инициализируем корневую директорию проекта
+
+//------------------------------------------------------------------------------
+// Определяем префиксы поддиректорий проекта
+$string e_model_prefix '&e_root&\model_e' |// comi-файлы, определяющие модель Scala
+$string m_model_prefix '&e_root&\model_m' |// comi-файлы, определяющие модель Tosca
+$string e_cases_prefix '&e_root&\cases_e' |// базы данных Scala
+$string m_cases_prefix '&e_root&\cases_m' |// базы данных Tosca
+$string tables_prefix  '&e_root&\tables'  |// таблицы
+$string tools_prefix   '&e_root&\tools'   |// инструменты, специфичные для проекта
+

@@ -1,0 +1,50 @@
+// e_boundary.comi
+//=============================================================================
+
+// ----------------------------------------------------------------------------
+// Задаем напряжения и плотность тока
+#E_AnodeVoltage=500|// Ускоряющее напряжение
+#E_KollectorVoltage=#E_AnodeVoltage |// Ускоряющее напряжение
+#E_Particle_L=#E_Cathode_H/8 |// Расстояние между частицами, мм
+#E_SPCD=4 |// Плотность тока, А/см^2 -- specified current density
+
+// ----------------------------------------------------------------------------
+// Выбираем эмиттер
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Emitter' IDENTIFIER=A.00001
+FACEDATA OPTION=MODIFY BOUNDARYLABEL='Emitter' |// Создаем метку граничных условий.
+BOUNDARY PICK 'Emitter'
+    BOUNDARY OPTION=MODIFY CONDITION=VOLTAGE VOLTAGE=0 
+BOUNDARY UNPICK 'Emitter'
+EMITTER OPTION=ADD LABEL='Emitter' LABELTYPE=BOUNDARY NAME='CURD'
+EMITTER OPTION=MODIFY, 
+    TYPE=Primary PARTICLE='Electron', 
+    ETYPE=CurrentDensity ONERAYPERELEM=YES LENGTH=#E_Particle_L*0.1, |// Настройки стартующих частиц
+    ENERGY=#E_AnodeVoltage CDENSITY=#E_SPCD
+
+// ----------------------------------------------------------------------------
+// Выбираем катод
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Cathode' IDENTIFIER=A.00001
+FACEDATA OPTION=MODIFY BOUNDARYLABEL='Cathode'
+BOUNDARY PICK 'Cathode'
+    BOUNDARY OPTION=MODIFY CONDITION=VOLTAGE VOLTAGE=0 
+BOUNDARY UNPICK 'Cathode'
+
+// ----------------------------------------------------------------------------
+// Выбираем Коллектор
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Kollector' IDENTIFIER=A.00002
+FACEDATA OPTION=MODIFY BOUNDARYLABEL='Kollector' |// Создаем метку граничных условий.
+BOUNDARY PICK 'Kollector'
+    BOUNDARY OPTION=MODIFY CONDITION=VOLTAGE VOLTAGE=#E_KollectorVoltage 
+BOUNDARY UNPICK 'Kollector'
+
+// ----------------------------------------------------------------------------
+// Накладываем ГУ Неймана TANGELEC на боковые стенки
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Drift' IDENTIFIER=A.00004
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Drift' IDENTIFIER=A.00003
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Drift' IDENTIFIER=A.00005
+PICK OPTION=TOGGLE TYPE=FACE UNIQUEBODYNAME='Drift' IDENTIFIER=A.00006
+FACEDATA OPTION=MODIFY BOUNDARYLABEL='Neumann' |// Создаем метку граничных условий.
+BOUNDARY PICK 'Neumann'
+    BOUNDARY OPTION=MODIFY CONDITION=TANGELEC
+BOUNDARY UNPICK 'Neumann'
+
