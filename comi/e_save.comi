@@ -1,0 +1,50 @@
+// e_save.comi
+//=============================================================================
+
+$EXIST '&e_cases_prefix&\&E_CaseName&.opc'
+$IF FILEEXISTS
+    $OS rm '&e_cases_prefix&\&E_CaseName&.opc'
+$END IF
+
+SAVE OPTION=NEW FILE='&e_cases_prefix&\&E_CaseName&.opc'
+
+// ----------------------------------------------------------------------------
+// Сохраняем параметры
+// ----------------------------------------------------------------------------
+$EXIST '&e_cases_prefix&\&E_CaseName&.comi'
+$IF FILEEXISTS
+    $OS rm '&e_cases_prefix&\&E_CaseName&.comi'
+$END IF
+
+$OPEN 1 '&e_cases_prefix&\&E_CaseName&.comi' OVERWRITE +USERVARIABLES
+$CLOSE 1
+
+//=============================================================================
+//== Б А З А   Д А Н Н Ы Х ====================================================
+//=============================================================================
+// >>Database -- тег навигации
+// ----------------------------------------------------------------------------
+// Создаем базу данных Scala
+// ----------------------------------------------------------------------------
+$EXIST '&e_cases_prefix&\&E_CaseName&.op3'
+$IF FILEEXISTS
+    $OS rm '&e_cases_prefix&\&E_CaseName&.op3'
+$END IF
+
+$EXIST '&e_cases_prefix&\&E_CaseName&.res'
+$IF FILEEXISTS
+    $OS rm '&e_cases_prefix&\&E_CaseName&.res'
+$END IF
+
+$EXIST '&e_cases_prefix&\&E_CaseName&_1.tracks'
+$IF FILEEXISTS
+    $OS rm '&e_cases_prefix&\&E_CaseName&_1.tracks'
+$END IF
+
+SOLVERS SOLVENOW=NO SAVEMODEL=YES OPTION=OVERWRITE FILE='&e_cases_prefix&\&E_CaseName&.op3' UNITS=MM ELEMENT=QUADRATIC
+
+$DIALOG ACTION=start TITLE='Report'
+    $DISPLAYLINE TEXT='Model completed.'
+    $DISPLAYLINE TEXT='Database &E_CaseName&.op3 can be solved with Scala solver.'
+    $DISPLAYLINE TEXT='Modeller working session will be CONTINUED.'
+$DIALOG ACTION=STOP
