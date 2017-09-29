@@ -50,6 +50,10 @@ func main() {
 func filenamesFromCommandLine() (inFilename, outFilename string, err error) {
 	usage := "usage: %s [<] [*_main.comi] "
 
+	//-------------------------------------------
+	// Надо сделать функцию разбора путей, а потом интегрировать её сюда
+	//-------------------------------------------
+
 	if len(os.Args) < 2 {
 		err = fmt.Errorf(usage, filepath.Base(os.Args[0]))
 		return "", "", err
@@ -89,6 +93,10 @@ func compile(inFile io.Reader, outFile io.Writer) (err error) {
 		line, err = reader.ReadString('\n')
 		lineFields := strings.Fields(line)
 		if len(lineFields) > 0 && (strings.EqualFold(lineFields[0], "$comi") || strings.EqualFold(lineFields[0], "$cominput")) {
+			//-------------------------------------------
+			// Вот здесь тоже надо сделать разбор путей
+			//-------------------------------------------
+
 			inScriptName := lineFields[1][1:len(lineFields[1])-1] + ".comi" // inline script name
 			dropline = true
 
