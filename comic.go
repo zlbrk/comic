@@ -11,10 +11,9 @@ import (
 )
 
 func main() {
+	fmt.Println("Добро пожаловать в comic - программу компиляции comi-файлов")
 	inFilename, outFilename, err := filenamesFromCommandLine()
-	fmt.Println("Добро пожаловать в comic - программу компиляции comi-файлов\n")
-	fmt.Println("Входной файл:", inFilename)
-	fmt.Println("Выходной файл:", outFilename)
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -48,28 +47,32 @@ func main() {
 }
 
 func filenamesFromCommandLine() (inFilename, outFilename string, err error) {
-	usage := "usage: %s [<] [*_main.comi] "
+	usage := "Пример: %s [<] [e_main.comi | m_main.comi]\nРезультатом компиляции является e_compiled.comi или m_compiled.comi."
+	// Отладочные строки
+	// fmt.Println("Аргументов:", len(os.Args), "\nАргументы:", os.Args)
+	// fmt.Println("filepath.Base(os.Args[1]):", filepath.Base(os.Args[1]))
+	// fmt.Println("filepath.Ext(os.Args[1]):", filepath.Ext(os.Args[1]))
 
-	//-------------------------------------------
-	// Надо сделать функцию разбора путей, а потом интегрировать её сюда
-	//-------------------------------------------
-
-	if len(os.Args) < 2 {
-		err = fmt.Errorf(usage, filepath.Base(os.Args[0]))
-		return "", "", err
-	} else if len(os.Args) > 1 && (os.Args[1] == "-h" || os.Args[1] == "--help") {
-		err = fmt.Errorf(usage, filepath.Base(os.Args[0]))
-		return "", "", err
-	}
-	if len(os.Args) > 1 {
-		inFilename = os.Args[1]
+	if len(os.Args) == 2 && strings.EqualFold(filepath.Ext(os.Args[1]), ".comi") {
+		inFilename = filepath.Base(os.Args[1])
+		fmt.Println("Входной файл:", inFilename)
 		outFilename = string(inFilename[0]) + "_compiled.comi"
-
+		fmt.Println("Выходной файл:", outFilename)
+	} else if len(os.Args) == 2 && (os.Args[1] == "-h" || os.Args[1] == "--help") {
+		err = fmt.Errorf(usage, filepath.Base(os.Args[0]))
+		return "", "", err
+	} else {
+		fmt.Printf("Программа %s принимает не более одного аргумента.\n", filepath.Base(os.Args[0]))
+		err = fmt.Errorf(usage, filepath.Base(os.Args[0]))
+		return "", "", err
 	}
+
 	if inFilename != "" && inFilename == outFilename {
 		log.Fatal("won’t overwrite the infile")
 	}
+
 	return inFilename, outFilename, nil
+
 }
 
 func compile(inFile io.Reader, outFile io.Writer) (err error) {
